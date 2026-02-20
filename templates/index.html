@@ -3,49 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SnapSave - Downloader</title>
+    <title>SnapSave Pro - Downloader</title>
     <link rel="manifest" href="/static/manifest.json">
-    <meta name="theme-color" content="#6366f1">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background: #f3f4f6; min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif; }
-        .glass { background: white; border-radius: 24px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); width: 100%; max-width: 450px; padding: 2rem; }
+        body { background: #f1f5f9; min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif; padding: 20px 0; }
+        .card { background: white; border-radius: 28px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); width: 100%; max-width: 420px; padding: 2rem; position: relative; }
+        .preview-img { width: 100%; height: 200px; object-fit: cover; border-radius: 20px; margin-bottom: 1.5rem; border: 4px solid #f8fafc; }
+        #ad-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 999; align-items: center; justify-content: center; padding: 20px; }
+        .ad-content { background: white; width: 100%; max-width: 350px; border-radius: 24px; padding: 20px; text-align: center; }
     </style>
 </head>
 <body>
-    <div class="glass mx-4">
+
+    <div id="ad-overlay">
+        <div class="ad-content">
+            <p class="text-[10px] text-gray-400 mb-3 uppercase tracking-widest font-bold">Iklan Sponsor</p>
+            <div class="w-full flex items-center justify-center min-h-[250px] bg-gray-50 rounded-xl overflow-hidden">
+                <script> 
+                    atOptions = { 'key' : '8f3789444ef17b839ac44324ba2c61f8', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} }; 
+                </script> 
+                <script src="https://www.highperformanceformat.com/8f3789444ef17b839ac44324ba2c61f8/invoke.js"></script>
+            </div>
+            <button id="close-ad" disabled class="w-full mt-5 bg-gray-200 text-gray-500 font-bold py-4 rounded-xl cursor-not-allowed transition-all">
+                Tutup Iklan (5s)
+            </button>
+        </div>
+    </div>
+
+    <div class="card mx-4">
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-extrabold text-indigo-600">SnapSave</h1>
-            <p class="text-gray-500 mt-2">Download video tanpa watermark</p>
+            <h1 class="text-3xl font-black text-indigo-600 tracking-tight">SnapSave</h1>
+            <p class="text-gray-400 text-xs mt-1 uppercase font-bold tracking-widest italic">Professional Edition</p>
         </div>
 
-        <form method="POST" class="space-y-4">
-            <input type="url" name="url" placeholder="Tempel link video di sini..." 
-                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition" required>
-            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-indigo-200">
+        {% if not result %}
+        <form method="POST" onsubmit="document.getElementById('loading').style.display='block'; this.classList.add('hidden')" class="space-y-4">
+            <div class="relative">
+                <input type="url" name="url" placeholder="Tempel link video..." class="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm transition" required>
+            </div>
+            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl shadow-lg shadow-indigo-100 transition-all">
                 Ambil Video
             </button>
         </form>
-
-        {% if video_url %}
-        <div class="mt-8 pt-6 border-t text-center">
-            <a href="{{ video_url }}" target="_blank" class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-xl font-bold transition w-full justify-center">
-                <i class="fa-solid fa-download"></i> Simpan Video
-            </a>
-            <p class="text-xs text-gray-400 mt-4 underline cursor-pointer" onclick="location.href='/'">Download Lagi</p>
+        <div id="loading" class="hidden text-center py-6">
+            <div class="animate-spin inline-block w-8 h-8 border-[3px] border-indigo-500 border-t-transparent rounded-full mb-3"></div>
+            <p class="text-gray-500 text-xs font-medium">Menganalisa Kualitas HD...</p>
         </div>
         {% endif %}
 
-        {% if error %}
-        <p class="mt-4 text-red-500 text-center text-sm font-medium">{{ error }}</p>
+        {% if result %}
+        <div class="animate-fade-in text-center">
+            <img src="{{ result.cover }}" class="preview-img shadow-sm">
+            
+            <div class="mb-6 rounded-xl overflow-hidden bg-gray-50">
+                <script async="async" data-cfasync="false" src="https://pl28756312.effectivegatecpm.com/f53ddd3cbb6e2967cec7b050d554b3bf/invoke.js"></script> 
+                <div id="container-f53ddd3cbb6e2967cec7b050d554b3bf"></div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-3">
+                <button onclick="startAdProcess('{{ result.video }}')" class="group w-full flex justify-between items-center bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-4 rounded-2xl font-bold transition-all shadow-md shadow-indigo-100">
+                    <span><i class="fa-solid fa-crown mr-2 text-yellow-300"></i> Download HD</span>
+                    <i class="fa-solid fa-chevron-right text-[10px] opacity-50 group-hover:translate-x-1 transition"></i>
+                </button>
+
+                <button onclick="forceDownload('{{ result.video }}', 'SD')" class="w-full flex justify-between items-center bg-gray-50 hover:bg-gray-100 text-gray-600 px-6 py-4 rounded-2xl font-bold border border-gray-100 transition-all text-sm">
+                    <span><i class="fa-solid fa-video mr-2"></i> Kualitas Standar</span>
+                </button>
+            </div>
+
+            <button onclick="location.href='/'" class="mt-6 text-gray-400 text-[10px] hover:text-indigo-600 transition uppercase tracking-widest font-bold">
+                ← Ambil Video Lain
+            </button>
+        </div>
         {% endif %}
+
+        <div class="text-center mt-8 pt-4 border-t border-gray-100">
+            <a href="/privacy" class="text-[9px] text-gray-300 hover:text-indigo-500 transition uppercase tracking-tighter">Privacy Policy • Terms of Service</a>
+        </div>
     </div>
 
     <script>
-      if ('service-worker' in navigator) {
-        navigator.serviceWorker.register('/static/sw.js');
-      }
+        let videoToDownload = "";
+
+        function startAdProcess(url) {
+            videoToDownload = url;
+            const overlay = document.getElementById('ad-overlay');
+            const closeBtn = document.getElementById('close-ad');
+            overlay.style.display = 'flex';
+            
+            let count = 5;
+            const timer = setInterval(() => {
+                count--;
+                closeBtn.innerText = `Tutup Iklan (${count}s)`;
+                if (count <= 0) {
+                    clearInterval(timer);
+                    closeBtn.innerText = "Tutup & Simpan HD";
+                    closeBtn.disabled = false;
+                    closeBtn.className = "w-full mt-5 bg-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg";
+                }
+            }, 1000);
+        }
+
+        document.getElementById('close-ad').onclick = function() {
+            document.getElementById('ad-overlay').style.display = 'none';
+            forceDownload(videoToDownload, 'HD');
+        };
+
+        async function forceDownload(url, qual) {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `SnapSave_${qual}_${Date.now()}.mp4`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
     </script>
+
+    <script src="https://pl28756115.effectivegatecpm.com/f5/65/19/f565198919d613788c0a507b4f879b01.js"></script>
 </body>
 </html>
