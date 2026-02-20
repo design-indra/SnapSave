@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontak Kami - SnapSave</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+    <nav class="py-4 px-6 bg-white border-b">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <a href="/" class="text-2xl font-black text-indigo-600">SnapSave</a>
+            <a href="/" class="text-sm font-bold text-gray-500 hover:text-indigo-600 transition">← Kembali</a>
+        </div>
+    </nav>
+
+    <main class="flex-grow flex items-center justify-center p-6">
+        <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-xl shadow-indigo-100/50 p-8 border border-indigo-50">
+            <div class="text-center mb-8">
+                <div class="bg-indigo-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-indigo-600 text-2xl">
+                    <i class="fa-solid fa-envelope-open-text"></i>
+                </div>
+                <h1 class="text-2xl font-black text-gray-900">Hubungi Kami</h1>
+                <p class="text-gray-500 text-sm mt-2 font-medium">Punya pertanyaan atau masukan? Kami siap membantu Anda.</p>
+            </div>
+
+            <form action="#" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Alamat Email</label>
+                    <input type="email" placeholder="nama@email.com" required
+                        class="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none transition text-sm">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Pesan Anda</label>
+                    <textarea rows="4" placeholder="Tuliskan pesan atau laporan bug di sini..." required
+                        class="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none transition text-sm resize-none"></textarea>
+                </div>
+
+                <button type="submit" 
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-4 rounded-2xl transition shadow-lg shadow-indigo-200 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i> KIRIM PESAN
+                </button>
+            </form>
+
+            <div class="mt-8 text-center">
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">Biasanya kami membalas dalam 24 jam</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="py-8 text-center text-gray-400 text-xs">
+        <p>© 2026 SnapSave All right reserved</p>
+    </footer>
+
+</body>
+</html>
