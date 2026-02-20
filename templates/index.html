@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #ffffff; }
+        body { font-family: 'Inter', sans-serif; background-color: #ffffff; scroll-behavior: smooth; }
         .hero-section { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); padding: 60px 20px; text-align: center; color: white; }
         .input-box { max-width: 700px; margin: -40px auto 0; background: white; padding: 10px; border-radius: 50px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); display: flex; align-items: center; }
         .input-box input { flex: 1; border: none; outline: none; padding: 15px 25px; border-radius: 50px; font-size: 16px; color: #333; }
-        .btn-download { background: #ff3b5c; color: white; font-weight: 700; padding: 15px 40px; border-radius: 50px; transition: 0.3s; }
+        .btn-download { background: #ff3b5c; color: white; font-weight: 700; padding: 15px 40px; border-radius: 50px; transition: 0.3s; border: none; cursor: pointer; }
         .btn-download:hover { background: #e02d4c; transform: scale(1.02); }
         #ad-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 999; align-items: center; justify-content: center; padding: 20px; }
         .ad-content { background: white; width: 100%; max-width: 350px; border-radius: 24px; padding: 20px; text-align: center; }
@@ -44,7 +44,7 @@
     </section>
 
     <div class="px-4">
-        <form method="POST" action="/" class="input-box">
+        <form id="download-form" method="POST" action="/" class="input-box">
             <input type="url" name="url" placeholder="Tempel tautan video di sini..." required>
             <button type="submit" class="btn-download hidden md:block text-sm uppercase">Download</button>
         </form>
@@ -59,76 +59,61 @@
     </div>
 
     {% if result %}
-    <section class="max-w-4xl mx-auto px-4 py-10">
+    <section id="download-result" class="max-w-4xl mx-auto px-4 py-10">
         <div class="flex flex-col md:flex-row gap-8 items-center bg-gray-50 p-6 rounded-3xl border">
             <img src="{{ result.cover }}" class="w-48 h-72 object-cover rounded-2xl shadow-lg">
-            <div class="flex-1 w-full space-y-4">
-                <h3 class="text-xl font-bold text-gray-800 text-center md:text-left">Video Siap Diunduh</h3>
+            <div class="flex-1 w-full space-y-4 text-center md:text-left">
+                <h3 class="text-xl font-bold text-gray-800">Video Siap Diunduh</h3>
                 <button onclick="startAdProcess('{{ result.video }}')" class="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700 transition">
-                    <i class="fa-solid fa-download mr-2"></i> Download Tanpa Watermark (HD)
+                    <i class="fa-solid fa-download mr-2"></i> Download HD (Tanpa Watermark)
                 </button>
                 <button onclick="forceDownload('{{ result.video }}', 'SD')" class="w-full bg-white border-2 border-indigo-600 text-indigo-600 py-4 rounded-xl font-bold hover:bg-indigo-50 transition text-sm">
-                    Download File Standar
+                    Download Kualitas Standar
                 </button>
-                <a href="/" class="block text-center text-gray-400 text-xs hover:underline">Download video lain</a>
+                <a href="/" class="block text-gray-400 text-xs hover:underline">Download video lain</a>
             </div>
         </div>
     </section>
     {% endif %}
 
-    <article class="max-w-4xl mx-auto px-6 py-16 prose prose-indigo">
+    <article class="max-w-4xl mx-auto px-6 py-16 prose">
         <h2 class="text-3xl font-extrabold text-gray-900 mb-6">Apa itu SnapSave?</h2>
-        <p class="text-gray-600 mb-4 leading-relaxed">SnapSave adalah salah satu layanan online terpopuler untuk mengunduh video TikTok tanpa tanda air (watermark). Anda tidak perlu menginstal perangkat lunak apa pun di komputer atau ponsel Anda; yang Anda butuhkan hanyalah tautan video TikTok.</p>
-        
-        <div class="grid md:grid-cols-3 gap-8 mt-12">
-            <div class="text-center">
-                <div class="bg-indigo-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-indigo-600 text-2xl">
-                    <i class="fa-solid fa-bolt"></i>
-                </div>
-                <h4 class="font-bold mb-2">Sangat Cepat</h4>
-                <p class="text-sm text-gray-500">Video diproses dalam hitungan detik saja.</p>
-            </div>
-            <div class="text-center">
-                <div class="bg-pink-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-pink-600 text-2xl">
-                    <i class="fa-solid fa-shield-halved"></i>
-                </div>
-                <h4 class="font-bold mb-2">Tanpa Watermark</h4>
-                <p class="text-sm text-gray-500">Hasil video bersih tanpa logo TikTok.</p>
-            </div>
-            <div class="text-center">
-                <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600 text-2xl">
-                    <i class="fa-solid fa-infinity"></i>
-                </div>
-                <h4 class="font-bold mb-2">Gratis Selamanya</h4>
-                <p class="text-sm text-gray-500">Gunakan layanan kami sepuasnya tanpa biaya.</p>
-            </div>
-        </div>
+        <p class="text-gray-600 leading-relaxed mb-4">SnapSave adalah layanan online untuk mengunduh video TikTok tanpa tanda air (watermark) secara gratis dan cepat.</p>
     </article>
 
-    <footer class="bg-gray-100 py-10 mt-20 border-t">
-        <div class="text-center">
-            <p class="text-gray-500 text-sm">© 2026 SnapSave Downloader. All rights reserved.</p>
-            <div class="mt-4 flex justify-center gap-6">
-                <a href="/privacy" class="text-xs text-indigo-600 font-semibold uppercase">Privacy Policy</a>
-                <a href="#" class="text-xs text-gray-400 uppercase">Contact</a>
-            </div>
+    <footer class="bg-gray-100 py-10 border-t text-center">
+        <p class="text-gray-500 text-sm">© 2026 SnapSave Downloader.</p>
+        <div class="mt-4 flex justify-center gap-6">
+            <a href="/privacy" class="text-xs text-indigo-600 font-semibold uppercase">Privacy Policy</a>
         </div>
     </footer>
 
     <script>
         let videoUrl = "";
+
+        // Auto-scroll ke hasil download saat halaman dimuat ulang dengan data
+        window.onload = function() {
+            {% if result %}
+                const resultSection = document.getElementById('download-result');
+                if (resultSection) {
+                    resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            {% endif %}
+        };
+
         function startAdProcess(url) {
             videoUrl = url;
             document.getElementById('ad-overlay').style.display = 'flex';
             let c = 5;
             const t = setInterval(() => {
                 c--;
-                document.getElementById('close-ad').innerText = `Tutup (${c}s)`;
-                if(c<=0){
+                const closeBtn = document.getElementById('close-ad');
+                closeBtn.innerText = `Tutup (${c}s)`;
+                if(c <= 0){
                     clearInterval(t);
-                    document.getElementById('close-ad').innerText = "Simpan Video Sekarang";
-                    document.getElementById('close-ad').disabled = false;
-                    document.getElementById('close-ad').className = "w-full mt-4 bg-indigo-600 text-white font-bold py-3 rounded-xl";
+                    closeBtn.innerText = "Simpan Video Sekarang";
+                    closeBtn.disabled = false;
+                    closeBtn.className = "w-full mt-4 bg-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg";
                 }
             }, 1000);
         }
@@ -138,14 +123,27 @@
             forceDownload(videoUrl, 'HD');
         };
 
+        // Fungsi Paksa Download agar langsung tersimpan di folder download
         async function forceDownload(u, q) {
-            const a = document.createElement('a');
-            a.href = u;
-            a.download = `SnapSave_${q}_${Date.now()}.mp4`;
-            document.body.appendChild(a);
-            a.click();
+            try {
+                const response = await fetch(u);
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = `SnapSave_${q}_${Date.now()}.mp4`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            } catch (error) {
+                // Fallback jika fetch diblokir browser
+                window.open(u, '_blank');
+            }
         }
     </script>
+
     <script src="https://pl28756115.effectivegatecpm.com/f5/65/19/f565198919d613788c0a507b4f879b01.js"></script>
 </body>
 </html>
