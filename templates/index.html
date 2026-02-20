@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapSave - Downloader</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background: #f3f4f6; min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif; }
+        .glass { background: white; border-radius: 24px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); width: 100%; max-width: 450px; padding: 2rem; }
+    </style>
+</head>
+<body>
+    <div class="glass mx-4">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-extrabold text-indigo-600">SnapSave</h1>
+            <p class="text-gray-500 mt-2">Download video tanpa watermark</p>
+        </div>
+
+        <form method="POST" class="space-y-4">
+            <input type="url" name="url" placeholder="Tempel link video di sini..." 
+                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition" required>
+            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-indigo-200">
+                Ambil Video
+            </button>
+        </form>
+
+        {% if video_url %}
+        <div class="mt-8 pt-6 border-t text-center">
+            <a href="{{ video_url }}" target="_blank" class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-xl font-bold transition w-full justify-center">
+                <i class="fa-solid fa-download"></i> Simpan Video
+            </a>
+            <p class="text-xs text-gray-400 mt-4 underline cursor-pointer" onclick="location.href='/'">Download Lagi</p>
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <p class="mt-4 text-red-500 text-center text-sm font-medium">{{ error }}</p>
+        {% endif %}
+    </div>
+
+    <script>
+      if ('service-worker' in navigator) {
+        navigator.serviceWorker.register('/static/sw.js');
+      }
+    </script>
+</body>
+</html>
