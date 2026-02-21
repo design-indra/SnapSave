@@ -3,19 +3,30 @@ import requests
 
 app = Flask(__name__)
 
-def get_video_data(link):
-    api_url = "https://www.tikwm.com/api/"
-    params = {'url': link}
+def get_insta_data(link):
+    # 1. Bersihkan link dari parameter tambahan agar API bekerja maksimal
+    # Menghapus bagian setelah tanda tanya (?)
+    clean_link = link.split("?")[0]
+    
+    # 2. URL API BhawaniGarg yang kamu minta
+    api_url = f"https://api.bhawanigarg.com/social/instagram/?url={clean_link}"
+    
     try:
-        response = requests.get(api_url, params=params)
+        # Menambahkan timeout agar website tidak loading selamanya jika API lambat
+        response = requests.get(api_url, timeout=15)
         data = response.json()
-        if data.get('code') == 0:
+        
+        # Berdasarkan struktur API BhawaniGarg:
+        # Jika sukses, data biasanya ada di dalam data['data']
+        if data.get('success') and data.get('data'):
+            item = data['data']
             return {
-                'video': data['data']['play'],
-                'cover': data['data']['cover']
+                'video': item.get('video_url'),
+                'cover': item.get('thumbnail')
             }
         return None
-    except:
+    except Exception as e:
+        print(f"Error pada API: {e}")
         return None
 
 @app.route('/', methods=['GET', 'POST'])
@@ -24,15 +35,23 @@ def index():
     error = None
     if request.method == 'POST':
         input_link = request.form.get('url')
-        result = get_video_data(input_link)
-        if not result:
-            error = "Gagal mengambil video. Pastikan link valid."
+        
+        if not input_link or "instagram.com" not in input_link:
+            error = "Mohon masukkan tautan Instagram yang valid."
+        else:
+            result = get_insta_data(input_link)
+            if not result:
+                error = "Gagal mengambil data. Pastikan video bukan dari akun privat atau coba lagi nanti."
+            
     return render_template('index.html', result=result, error=error)
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
 
 @app.route('/privacy')
 def privacy():
     return render_template('privacy.html')
-    
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
