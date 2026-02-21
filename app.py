@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, Response
 import requests
 import os
+import time
 
 template_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask(__name__, template_folder=template_dir)
@@ -45,7 +46,6 @@ def get_tiktok_via_musicaldown(clean_link):
         data = r.json()
         links = data.get('links', [])
         video_url = None
-        cover_url = None
         for item in links:
             if item.get('type') == 'mp4' and 'watermark' not in item.get('name', '').lower():
                 video_url = item.get('link')
@@ -85,13 +85,12 @@ def get_tiktok_via_snaptik(clean_link):
 
 def get_tiktok_data(link):
     clean_link = link.split("?")[0]
-    
-    # Coba API satu per satu
+
     result = get_tiktok_via_tikwm(clean_link)
     if result and result.get('video'):
         print("Berhasil via tikwm")
         return result
-    
+
     result = get_tiktok_via_snaptik(clean_link)
     if result and result.get('video'):
         print("Berhasil via snaptik")
@@ -119,13 +118,35 @@ def index():
                 error = "Gagal mengambil video. Coba beberapa saat lagi."
     return render_template('index.html', result=result, error=error)
 
-# --- ROUTE DOWNLOAD: Redirect langsung ke URL video ---
+# --- ROUTE DOWNLOAD: Force download via proxy stream ---
 @app.route('/download')
 def download():
     video_url = request.args.get('url')
     if not video_url:
         return "URL tidak valid", 400
-    return redirect(video_url)
+    try:
+        dl_headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Referer': 'https://www.tiktok.com/'
+        }
+        r = requests.get(video_url, headers=dl_headers, stream=True, timeout=30)
+        filename = f"SnapSave_{int(time.time())}.mp4"
+
+        def generate():
+            for chunk in r.iter_content(chunk_size=8192):
+                if chunk:
+                    yield chunk
+
+        return Response(
+            generate(),
+            headers={
+                'Content-Disposition': f'attachment; filename="{filename}"',
+                'Content-Type': 'video/mp4',
+            }
+        )
+    except Exception as e:
+        print(f"Download error: {e}")
+        return redirect(video_url)
 
 @app.route('/contact')
 def contact():
