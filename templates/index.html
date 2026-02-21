@@ -73,7 +73,7 @@
                     <button onclick="startAdProcess('{{ result.video }}')" class="w-full bg-indigo-600 text-white py-5 rounded-2xl font-black text-lg hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 flex items-center justify-center gap-3">
                         <i class="fa-solid fa-cloud-arrow-down"></i> DOWNLOAD HD (NO WM)
                     </button>
-                    <button onclick="forceDownload('{{ result.video }}', 'SD')" class="w-full bg-gray-50 text-gray-600 py-4 rounded-2xl font-bold hover:bg-gray-100 transition border border-gray-200">
+                    <button onclick="proxyDownload('{{ result.video }}')" class="w-full bg-gray-50 text-gray-600 py-4 rounded-2xl font-bold hover:bg-gray-100 transition border border-gray-200">
                         Download Server 2
                     </button>
                 </div>
@@ -200,26 +200,17 @@
 
         document.getElementById('close-ad').onclick = () => {
             document.getElementById('ad-overlay').style.display = 'none';
-            forceDownload(videoUrl, 'HD');
+            proxyDownload(videoUrl);
         };
 
-        // Fungsi Force Download (Blob)
-        async function forceDownload(u, q) {
-            try {
-                const response = await fetch(u);
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.style.display = 'none';
-                a.href = url;
-                a.download = `SnapSave_${q}_${Date.now()}.mp4`;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(a);
-            } catch (error) {
-                window.open(u, '_blank');
-            }
+        // Fungsi Download lewat Backend (Fix CORS)
+        function proxyDownload(u) {
+            const a = document.createElement('a');
+            a.href = '/download?url=' + encodeURIComponent(u);
+            a.download = '';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
     </script>
     <script src="https://pl28756115.effectivegatecpm.com/f5/65/19/f565198919d613788c0a507b4f879b01.js"></script>
