@@ -3,30 +3,31 @@ import requests
 
 app = Flask(__name__)
 
-def get_insta_data(link):
-    # 1. Bersihkan link dari parameter tambahan agar API bekerja maksimal
-    # Menghapus bagian setelah tanda tanya (?)
+def get_tiktok_data(link):
+    # Membersihkan link dari parameter pelacakan (?is_from_webapp=1...)
     clean_link = link.split("?")[0]
     
-    # 2. URL API BhawaniGarg yang kamu minta
-    api_url = f"https://api.bhawanigarg.com/social/instagram/?url={clean_link}"
+    # Menggunakan API TikWM yang sangat stabil untuk TikTok
+    api_url = "https://www.tikwm.com/api/web/info"
     
     try:
-        # Menambahkan timeout agar website tidak loading selamanya jika API lambat
-        response = requests.get(api_url, timeout=15)
+        # Melakukan request ke API TikWM
+        response = requests.get(api_url, params={'url': clean_link}, timeout=15)
         data = response.json()
         
-        # Berdasarkan struktur API BhawaniGarg:
-        # Jika sukses, data biasanya ada di dalam data['data']
-        if data.get('success') and data.get('data'):
+        # TikWM mengembalikan 'code': 0 jika berhasil
+        if data.get('code') == 0 and data.get('data'):
             item = data['data']
+            
+            # Mengambil data video (Tanpa Watermark) dan Cover
             return {
-                'video': item.get('video_url'),
-                'cover': item.get('thumbnail')
+                'video': item.get('play'),        # URL Video Tanpa Watermark
+                'cover': item.get('cover'),       # Gambar Preview
+                'title': item.get('title', 'TikTok Video') # Judul/Caption Video
             }
         return None
     except Exception as e:
-        print(f"Error pada API: {e}")
+        print(f"Error pada API TikTok: {e}")
         return None
 
 @app.route('/', methods=['GET', 'POST'])
@@ -36,12 +37,13 @@ def index():
     if request.method == 'POST':
         input_link = request.form.get('url')
         
-        if not input_link or "instagram.com" not in input_link:
-            error = "Mohon masukkan tautan Instagram yang valid."
+        # Validasi link TikTok
+        if not input_link or "tiktok.com" not in input_link:
+            error = "Mohon masukkan tautan TikTok yang valid."
         else:
-            result = get_insta_data(input_link)
+            result = get_tiktok_data(input_link)
             if not result:
-                error = "Gagal mengambil data. Pastikan video bukan dari akun privat atau coba lagi nanti."
+                error = "Gagal mengambil video. Pastikan link benar dan video tidak dihapus."
             
     return render_template('index.html', result=result, error=error)
 
